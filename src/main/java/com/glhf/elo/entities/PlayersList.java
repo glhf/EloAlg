@@ -23,28 +23,43 @@ public class PlayersList implements PlayersProcessor {
 
     public PlayersList(List<String> players){
         this.incomPlayersStream=players;
+        load();
     }
 
     /**
      * Parsing input stream of strings in the format
-     *
-     *  ID Name
-     *
-     * @return
+     * ID Name
      */
     @Override
-    public void load() throws NullPointerException{
+    public void load() throws NullPointerException {
         if (incomPlayersStream==null) throw new NullPointerException();
         this.incomPlayersStream.forEach(el -> {
             String[] strings = el.split(" ");
             playersSet.put(Integer.parseInt(strings[0]), new Player(Integer.parseInt(strings[0]),strings[1]));
         });
-        LOG.debug("loaded " + playersSet.size() + " records");
+        LOG.info("loaded " + playersSet.size() + " records");
+
+        this.incomPlayersStream=null;
     }
 
     @Override
     public int getCountOfPlayers() {
         return playersSet.size();
+    }
+
+    @Override
+    public Playing getPlayer(int id) throws NoSuchElementException {
+        if (this.playersSet.containsKey(id)) {
+            return this.playersSet.get(id);
+        } else {
+            throw new NoSuchElementException("No player with shuck id!");
+        }
+    }
+
+    @Override
+    public void addNewPlayer(int id, String name) throws  IllegalArgumentException{
+        if (playersSet.containsKey(id)) throw new IllegalArgumentException("ID already exist in system!");
+        playersSet.put(id, new Player(id, name));
     }
 
     @Override
@@ -73,31 +88,22 @@ public class PlayersList implements PlayersProcessor {
         new LinkedList<>(this.playersSet.values()).forEach(el -> LOG.info(el.toString()));
     }
 
-    @Override
-    public Playing getPlayer(int id) throws NoSuchElementException {
-        if (this.playersSet.containsKey(id)) {
-            return this.playersSet.get(id);
-        } else {
-            throw new NoSuchElementException("No player with shuck id!");
-        }
-    }
-
     class ComparatorByPoints implements Comparator<Playing> {
         @Override
         public int compare(Playing o1, Playing o2) {
-            return o1.getPoints() > o2.getPoints() ? 1 : o1.getPoints() < o2.getPoints() ? -1 : 0;
+            return o1.getPoints() < o2.getPoints() ? 1 : o1.getPoints() > o2.getPoints() ? -1 : 0;
         }
     }
     class ComparatorByWins implements Comparator<Playing> {
         @Override
         public int compare(Playing o1, Playing o2) {
-            return o1.getCountOfWins() > o2.getCountOfWins() ? 1 : o1.getCountOfWins() < o2.getCountOfWins() ? -1 : 0;
+            return o1.getCountOfWins() < o2.getCountOfWins() ? 1 : o1.getCountOfWins() > o2.getCountOfWins() ? -1 : 0;
         }
     }
     class ComparatorByLoses implements Comparator<Playing> {
         @Override
         public int compare(Playing o1, Playing o2) {
-            return o1.getCountOfLoses() > o2.getCountOfLoses() ? 1 : o1.getCountOfLoses() < o2.getCountOfLoses() ? -1 : 0;
+            return o1.getCountOfLoses() < o2.getCountOfLoses() ? 1 : o1.getCountOfLoses() > o2.getCountOfLoses() ? -1 : 0;
         }
     }
 }

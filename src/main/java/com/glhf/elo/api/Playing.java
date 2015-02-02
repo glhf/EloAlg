@@ -1,5 +1,9 @@
 package com.glhf.elo.api;
 
+import com.glhf.elo.entities.MatchInfo;
+
+import java.util.List;
+
 /**
  * Instances that can be able to play match
  *
@@ -11,23 +15,23 @@ package com.glhf.elo.api;
  *         goodvin4@gmail.com
  */
 public interface Playing {
+
+    public void addMatch(Playing opponent, String result);
+
+    public List<MatchInfo> getPlayedMatchesReport();
+
     /**
      * Method that using to instance that had win the match
      * @param inc count of points that would be able
      */
-    public void increasePoitns(double inc);
-
-    /**
-     * Method that using to instance that had lose the match
-     * @param dec count of points that would be able
-     */
-    public void decreasePoitns(double dec);
+    public void correctPoitns(double inc);
 
     /**
      * return count of points that are able
      * @return
      */
     public double getPoints();
+
 
     /**
      * Get count of wins
@@ -38,4 +42,15 @@ public interface Playing {
      * Get count of loses
      */
     public int getCountOfLoses();
+
+    /**
+     * Get count of draws
+     */
+    public int getCountOfDraws();
+
+
+
+    public int getId();
+
+    public String getName();
 }

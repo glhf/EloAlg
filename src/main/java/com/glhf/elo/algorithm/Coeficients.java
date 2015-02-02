@@ -1,4 +1,4 @@
-package com.glhf.elo.api;
+package com.glhf.elo.algorithm;
 
 /**
  * Support logic for matches
@@ -7,15 +7,15 @@ package com.glhf.elo.api;
  *         github.com/glhf
  *         goodvin4@gmail.com
  */
-public interface Coeficients {
+public class Coeficients {
 
     /**
      * Coefficient that will be return depend form rank of playing instance
      * @param rank
      * @return
      */
-    default double getCoefficients(double rank){
+    public static double getCoefficients(double rank){
         //TODO rewrite logic of getting coefficient
-        return 10;
+        return 32;
     }
 }

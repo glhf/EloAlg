@@ -1,8 +1,12 @@
 package com.glhf.elo.entities;
 
+import com.glhf.elo.api.MatchStatus;
 import com.glhf.elo.api.Playing;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Simple player instance
@@ -14,27 +18,46 @@ import org.apache.logging.log4j.Logger;
  */
 public class Player implements Playing {
     private static final Logger LOG = LogManager.getLogger(Player.class);
+
     private int wins = 0;
+    private int draws = 0;
     private int loses = 0;
     private int id;
     private String name;
     private double points = 400;
+    private List<MatchInfo> history = new LinkedList<>();
 
     public Player(int id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    @Override
-    public void increasePoitns(double inc){
-        this.points+=inc;
-        this.wins++;
+    public Player(int id, String name, double points) {
+        this.id = id;
+        this.name = name;
+        this.points = points;
     }
 
     @Override
-    public void decreasePoitns(double dec){
-        this.points-=dec;
-        this.loses--;
+    public void addMatch(Playing opponent, String result) {
+        history.add(new MatchInfo(opponent, result));
+    }
+
+    @Override
+    public List<MatchInfo> getPlayedMatchesReport() {
+        return this.history;
+    }
+
+    @Override
+    public void correctPoitns(double inc){
+        this.points+=inc;
+        if (inc>0) {
+            this.wins++;
+        } else if (inc==0) {
+            this.draws++;
+        } else {
+            this.loses++;
+        }
     }
 
     @Override
@@ -53,23 +76,32 @@ public class Player implements Playing {
     }
 
     @Override
-    public String toString() {
-        return new StringBuffer().append(getId()).append(" ").append(getName()).append(" ").append(getPoints()).toString();
+    public int getCountOfDraws(){
+        return this.draws;
     }
 
+    @Override
+    public String toString() {
+        return new StringBuffer().append(getId()).append(" ").append(getName()).append(" \t")
+                .append(getPoints()).append(" \t").append(getCountOfWins()).append(" \t").append(getCountOfLoses()).append(" \t")
+                .append(historyToString()).toString();
+    }
+
+    public String historyToString() {
+        StringBuffer sb = new StringBuffer();
+        history.forEach(el -> sb.append(el.toString()));
+        return sb.toString();
+    }
+
+    @Override
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
+    @Override
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+
 }

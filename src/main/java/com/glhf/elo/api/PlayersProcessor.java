@@ -26,9 +26,19 @@ public interface PlayersProcessor {
     public void load();
 
     /**
+     * add new player
+     */
+    public void addNewPlayer(int id, String name);
+
+    /**
      *
      */
     public int getCountOfPlayers();
+
+    /**
+     * Get player instance by ID
+     */
+    public Playing getPlayer(int id) throws NoSuchElementException;
 
     /**
      * Sorted available players by
@@ -43,9 +53,4 @@ public interface PlayersProcessor {
      * Printed list of player
      */
     public void print();
-
-    /**
-     * Get player instance by ID
-     */
-    public Playing getPlayer(int id) throws NoSuchElementException;
 }
