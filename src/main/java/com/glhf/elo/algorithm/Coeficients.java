@@ -16,6 +16,6 @@ public class Coeficients {
      */
     public static double getCoefficients(double rank){
         //TODO rewrite logic of getting coefficient
-        return 32;
+        return 10;
     }
 }

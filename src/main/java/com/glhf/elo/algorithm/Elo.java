@@ -52,8 +52,8 @@ public class Elo {
         double newFirstPlayerRatingCorrection = Coeficients.getCoefficients(firstPlayer.getPoints()) * (status.getFirstPlayerCoefficient()-this.firstPlayerWinProbability);
         double newSecondPlayerRatingCorrection = Coeficients.getCoefficients(secondPlayer.getPoints()) * (status.getSecondPlayerCoefficient()-this.secondPlayerWinProbability);
         LOG.info("H=" + firstPlayer.getName() + " G=" + secondPlayer.getName() + " Match result: " + status.toString()
-                                        + " \nhome has changed: " + newFirstPlayerRatingCorrection
-                                        + " guest has changed: " + newSecondPlayerRatingCorrection );
+                                        + " H changed: " + newFirstPlayerRatingCorrection
+                                        + " G changed: " + newSecondPlayerRatingCorrection );
         switch (status) {
             //s1=0.5    s2=0.5
             case DRAW :
@@ -85,8 +85,8 @@ public class Elo {
         double newFirstPlayerRatingCorrection = Coeficients.getCoefficients(firstPlayer.getPoints()) * (status.getFirstPlayerCoefficient()-firstPlayerWinProbability);
         double newSecondPlayerRatingCorrection = Coeficients.getCoefficients(secondPlayer.getPoints()) * (status.getSecondPlayerCoefficient()-secondPlayerWinProbability);
 
-        LOG.debug("Match result: " + status.toString() + " \nhome has changed: " + newFirstPlayerRatingCorrection
-                + " guest has changed: " + newSecondPlayerRatingCorrection );
+        LOG.debug("Match result: " + status.toString() + " H changed: " + newFirstPlayerRatingCorrection
+                + " G changed: " + newSecondPlayerRatingCorrection );
         switch (status) {
             //s1=0.5    s2=0.5
             case DRAW :
