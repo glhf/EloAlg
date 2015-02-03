@@ -1,6 +1,5 @@
 package com.glhf.elo.entities;
 
-import com.glhf.elo.api.MatchStatus;
 import com.glhf.elo.api.Playing;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -82,11 +81,11 @@ public class Player implements Playing {
 
     @Override
     public String toString() {
-        return new StringBuffer().append(getId()).append(" ").append(getName()).append(" \t")
-                .append(getPoints()).append(" \t").append(getCountOfWins()).append(" \t").append(getCountOfLoses()).append(" \t")
-                .append(historyToString()).toString();
+        return new StringBuffer().append(getId()).append(" \t").append(getName()).append(" \t")
+                .append(getPoints()).append(" \t").append(getCountOfWins()).append(" \t").append(getCountOfLoses()).toString();
     }
 
+    @Override
     public String historyToString() {
         StringBuffer sb = new StringBuffer();
         history.forEach(el -> sb.append(el.toString()));

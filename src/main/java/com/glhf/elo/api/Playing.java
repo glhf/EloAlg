@@ -48,7 +48,11 @@ public interface Playing {
      */
     public int getCountOfDraws();
 
-
+    /**
+     * get history of matches as string value
+     * @return
+     */
+    public String historyToString();
 
     public int getId();
 

@@ -51,7 +51,7 @@ public class Elo {
          */
         double newFirstPlayerRatingCorrection = Coeficients.getCoefficients(firstPlayer.getPoints()) * (status.getFirstPlayerCoefficient()-this.firstPlayerWinProbability);
         double newSecondPlayerRatingCorrection = Coeficients.getCoefficients(secondPlayer.getPoints()) * (status.getSecondPlayerCoefficient()-this.secondPlayerWinProbability);
-        LOG.info("H=" + firstPlayer.getName() + " G=" + secondPlayer.getName() + " Match result: " + status.toString()
+        LOG.debug("H=" + firstPlayer.getName() + " G=" + secondPlayer.getName() + " Match result: " + status.toString()
                                         + " H changed: " + newFirstPlayerRatingCorrection
                                         + " G changed: " + newSecondPlayerRatingCorrection );
         switch (status) {

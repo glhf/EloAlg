@@ -27,7 +27,6 @@ public class TestPlayersEntities {
         }
 
         PlayersProcessor pp = new PlayersList(lines);
-        pp.load();
 
         Assert.assertEquals(pp.getCountOfPlayers(), 40);
 

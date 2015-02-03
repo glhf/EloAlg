@@ -37,7 +37,7 @@ public class PlayersList implements PlayersProcessor {
             String[] strings = el.split(" ");
             playersSet.put(Integer.parseInt(strings[0]), new Player(Integer.parseInt(strings[0]),strings[1]));
         });
-        LOG.info("loaded " + playersSet.size() + " records");
+        LOG.debug("loaded " + playersSet.size() + " records");
 
         this.incomPlayersStream=null;
     }
@@ -52,7 +52,7 @@ public class PlayersList implements PlayersProcessor {
         if (this.playersSet.containsKey(id)) {
             return this.playersSet.get(id);
         } else {
-            throw new NoSuchElementException("No player with shuck id!");
+            throw new NoSuchElementException("No player with such id!");
         }
     }
 

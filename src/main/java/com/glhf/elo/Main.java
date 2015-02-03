@@ -26,15 +26,18 @@ public class Main {
     static Options options = new Options();
 
     static void initParser() {
-        options.addOption("p", "players", true, "path to players file");
-        options.addOption("m", "matches", true, "path to matches file");
-        options.addOption("rp", "resultsPoints", false, "show rating of players by scores");
-        options.addOption("rw", "resultsWins", false, "show rating of players by count of wins");
-        options.addOption("rl", "resultsLoses", false, "show rating of players by count of loses");
+        options.addOption("h", "help", false,"Print help info");
+        options.addOption("p", "players", true, "arg - is path to players file");
+        options.addOption("m", "matches", true, "arg - is path to matches file");
+        options.addOption("rp", "resultsPoints", false, "Show rating of players by scores");
+        options.addOption("rw", "resultsWins", false, "Show rating of players by count of wins");
+        options.addOption("rl", "resultsLoses", false, "Show rating of players by count of loses");
         Option suggested  = OptionBuilder.hasArgs(2)
                 .withValueSeparator(' ')
-                .withDescription("Generate suggestion between two players")
+                .withLongOpt("suggested")
+                .withDescription("Generate suggestion between two players. Args: <first_player_ID> <second_player_ID>.")
                 .create("d");
+        options.addOption(suggested);
     }
 
     public static void main(String[] args) {
@@ -45,9 +48,17 @@ public class Main {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        if (cl.hasOption("help")) {
+            HelpFormatter formatter = new HelpFormatter();
+            formatter.printHelp( "ant", options );
+        }
+
         String matchesPath;
         String playersPath;
-        if (!cl.hasOption('p')&!cl.hasOption('m')){ return; } else {
+        if (!cl.hasOption('p') | !cl.hasOption('m')){
+            System.out.println("No required vars!");
+            return;
+        } else {
             matchesPath = cl.getOptionValue('m');
             playersPath = cl.getOptionValue('p');
         }
@@ -74,15 +85,20 @@ public class Main {
 
         if (cl.hasOption("resultsPoints")) {
             //provide sort by points
-            eng.getSortedByPointsPlayersList().forEach(els -> System.out.println(els.toString()));
-        } else if (cl.hasOption("resultsWins")) {
+            eng.getSortedByPointsPlayersList().forEach(els -> LOG.info(els.toString()));
+        }
+        if (cl.hasOption("resultsWins")) {
             //provide sort by wins
-            eng.getSortedByWinsPlayersList().forEach(els -> System.out.println(els.toString()));
-        } else if (cl.hasOption("resultsLoses")) {
+            eng.getSortedByWinsPlayersList().forEach(els -> LOG.info(els.toString()));
+        }
+        if (cl.hasOption("resultsLoses")) {
             //provide sort by loses
-            eng.getSortedByLosesPlayersList().forEach(els -> System.out.println(els.toString()));
-        } else if (cl.hasOption("d")) {
+            eng.getSortedByLosesPlayersList().forEach(els -> LOG.info(els.toString()));
+        }
+        if (cl.hasOption("suggested")) {
             //provide chances for winind ID1 and ID2
+            String[] vals = cl.getOptionValues("suggested");
+            LOG.info(eng.getSuggestedChances(Integer.valueOf(vals[0]), Integer.valueOf(vals[1])));
         }
 
     }

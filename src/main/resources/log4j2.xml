@@ -44,8 +44,7 @@
             <AppenderRef ref="Console" level="info"/>
         </Logger>
 
-        <Logger name="com.glhf.elo.algorithm.Elo" level="debug" additivity="false">
-            <AppenderRef ref="Console" level="info"/>
+        <Logger name="com.glhf.elo.algorithm.Elo" level="info" additivity="true">
             <AppenderRef ref="Mathces" level="debug"/>
         </Logger>
     </Loggers>
