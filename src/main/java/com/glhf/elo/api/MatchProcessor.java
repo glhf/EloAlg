@@ -1,5 +1,7 @@
 package com.glhf.elo.api;
 
+import com.glhf.elo.engines.EloException;
+
 /**
  * @author Mykola Polonskyi
  *         on 02.02.15
@@ -12,7 +14,7 @@ public interface MatchProcessor {
      * loading dump with matches list
      * and provide them
      */
-    public void load();
+    public void load() throws EloException;
 
     /**
      * Add match with playings instances

@@ -1,6 +1,7 @@
 package com.glhf.elo;
 
 import com.glhf.elo.api.PlayersProcessor;
+import com.glhf.elo.engines.EloException;
 import com.glhf.elo.engines.Engine;
 import com.glhf.elo.entities.PlayersList;
 import org.apache.commons.cli.*;
@@ -80,26 +81,28 @@ public class Main {
         while (matches.hasNextLine()) {
             matchLines.add(matches.nextLine());
         }
+        try {
+            Engine eng = new Engine(namesLines, matchLines);
 
-        Engine eng = new Engine(namesLines, matchLines);
-
-        if (cl.hasOption("resultsPoints")) {
-            //provide sort by points
-            eng.getSortedByPointsPlayersList().forEach(els -> LOG.info(els.toString()));
+            if (cl.hasOption("resultsPoints")) {
+                //provide sort by points
+                eng.getSortedByPointsPlayersList().forEach(els -> LOG.info(els.toString()));
+            }
+            if (cl.hasOption("resultsWins")) {
+                //provide sort by wins
+                eng.getSortedByWinsPlayersList().forEach(els -> LOG.info(els.toString()));
+            }
+            if (cl.hasOption("resultsLoses")) {
+                //provide sort by loses
+                eng.getSortedByLosesPlayersList().forEach(els -> LOG.info(els.toString()));
+            }
+            if (cl.hasOption("suggested")) {
+                //provide chances for winind ID1 and ID2
+                String[] vals = cl.getOptionValues("suggested");
+                LOG.info(eng.getSuggestedChances(Integer.valueOf(vals[0]), Integer.valueOf(vals[1])));
+            }
+        } catch (EloException e) {
+            LOG.error(e);
         }
-        if (cl.hasOption("resultsWins")) {
-            //provide sort by wins
-            eng.getSortedByWinsPlayersList().forEach(els -> LOG.info(els.toString()));
-        }
-        if (cl.hasOption("resultsLoses")) {
-            //provide sort by loses
-            eng.getSortedByLosesPlayersList().forEach(els -> LOG.info(els.toString()));
-        }
-        if (cl.hasOption("suggested")) {
-            //provide chances for winind ID1 and ID2
-            String[] vals = cl.getOptionValues("suggested");
-            LOG.info(eng.getSuggestedChances(Integer.valueOf(vals[0]), Integer.valueOf(vals[1])));
-        }
-
     }
 }

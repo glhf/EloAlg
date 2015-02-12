@@ -12,23 +12,26 @@ package com.glhf.elo.api;
  */
 public interface Matchable {
 
+    public Playing getFirstPlayer();
+    public Playing getSecondPlayer();
+
     /**
      * Set winner method. Provide setting of winner with recounting of ratings of playing instance
      * @param status can get DRAW HOME_WIN GUEST_WIN incoming values
      */
-    public void setWinner(MatchStatus status);
+    //public void setWinner(MatchStatus status);
 
     /**
      * Get probability of first object win
      * "Home team"
      * @return probability
      */
-    public double getFirstWinProbability();
+    //public double getFirstWinProbability();
 
     /**
      * Get probability of first object win
      * "Guest team"
      * @return probability
      */
-    public double getSecondWinProbability();
+    //public double getSecondWinProbability();
 }

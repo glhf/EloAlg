@@ -1,7 +1,9 @@
 package com.glhf.elo.algorithm;
 
 import com.glhf.elo.api.MatchStatus;
+import com.glhf.elo.api.Matchable;
 import com.glhf.elo.api.Playing;
+import com.glhf.elo.entities.Match;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -20,11 +22,11 @@ public class Elo {
     private Playing firstPlayer;
     private Playing secondPlayer;
 
-    private final double firstPlayerTransformedRaiting;
-    private final double secondPlayerTransformedRaiting;
+    private double firstPlayerTransformedRaiting;
+    private double secondPlayerTransformedRaiting;
 
-    private final double firstPlayerWinProbability;
-    private final double secondPlayerWinProbability;
+    private static double firstPlayerWinProbability;
+    private static double secondPlayerWinProbability;
 
     public Elo(Playing firstPlayer, Playing secondPlayer) {
         this.firstPlayer = firstPlayer;
@@ -44,11 +46,16 @@ public class Elo {
                 + " \nfirstPlayerWinProbability=" +firstPlayerWinProbability + " secondPlayerWinProbability=" + secondPlayerWinProbability);
     }
 
-    public void processMatchResult(MatchStatus status) {
+    public Elo(Match match) {
+        this(match.getFirstPlayer(), match.getSecondPlayer());
+    }
+
+
+    /*public void processMatchResult(MatchStatus status) {
         /**
          * counting how much  points would be added or subtract
          * from specified match result
-         */
+         *//*
         double newFirstPlayerRatingCorrection = Coeficients.getCoefficients(firstPlayer.getPoints()) * (status.getFirstPlayerCoefficient()-this.firstPlayerWinProbability);
         double newSecondPlayerRatingCorrection = Coeficients.getCoefficients(secondPlayer.getPoints()) * (status.getSecondPlayerCoefficient()-this.secondPlayerWinProbability);
         LOG.debug("H=" + firstPlayer.getName() + " G=" + secondPlayer.getName() + " Match result: " + status.toString()
@@ -59,18 +66,37 @@ public class Elo {
             case DRAW :
                 this.firstPlayer.correctPoitns(newFirstPlayerRatingCorrection);
                 this.secondPlayer.correctPoitns(newSecondPlayerRatingCorrection);
+                this.firstPlayer.addMatch(this.secondPlayer, "draw");
+                this.secondPlayer.addMatch(this.firstPlayer, "draw");
                 break;
             //s1=1      s2=0
             case HOME_WIN:
                 this.firstPlayer.correctPoitns(newFirstPlayerRatingCorrection);
                 this.secondPlayer.correctPoitns(newSecondPlayerRatingCorrection);
+                this.firstPlayer.addMatch(this.secondPlayer, "win");
+                this.secondPlayer.addMatch(this.firstPlayer, "lose");
                 break;
             //s1=0      s2=1
             case GUEST_WIN:
                 this.firstPlayer.correctPoitns(newFirstPlayerRatingCorrection);
                 this.secondPlayer.correctPoitns(newSecondPlayerRatingCorrection);
+                this.secondPlayer.addMatch(this.firstPlayer, "win");
+                this.firstPlayer.addMatch(this.secondPlayer, "lose");
                 break;
         }
+    }*/
+    public static void setMatch(Matchable match) {
+        double firstPlayerTransformedRating = Math.pow(10, match.getFirstPlayer().getPoints() / 400);
+        double secondPlayerTransformedRating = Math.pow(10, match.getSecondPlayer().getPoints() / 400);
+
+        firstPlayerWinProbability = firstPlayerTransformedRating / (firstPlayerTransformedRating + secondPlayerTransformedRating);
+        secondPlayerWinProbability = secondPlayerTransformedRating / (firstPlayerTransformedRating + secondPlayerTransformedRating);
+
+        LOG.debug("Match: "+ match.getFirstPlayer().toString() + " and " + match.getSecondPlayer().toString() + "firstPlayerWinProbability="+firstPlayerWinProbability + " secondPlayerWinProbability="+secondPlayerWinProbability);
+    }
+
+    public static void eloProcessing(Match match, MatchStatus status) {
+        eloProcessing(match.getFirstPlayer(), match.getSecondPlayer(), status);
     }
 
     public static void eloProcessing(Playing firstPlayer, Playing secondPlayer, MatchStatus status) {
@@ -106,11 +132,11 @@ public class Elo {
         }
     }
 
-    public double getFirstPlayerWinProbability() {
+    public static double getFirstPlayerWinProbability() {
         return firstPlayerWinProbability;
     }
 
-    public double getSecondPlayerWinProbability() {
+    public static double getSecondPlayerWinProbability() {
         return secondPlayerWinProbability;
     }
 }

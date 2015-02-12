@@ -18,70 +18,26 @@ import org.apache.logging.log4j.Logger;
 public class Match implements Matchable {
     private static final Logger LOG = LogManager.getLogger(Match.class);
 
-    private static Elo algorithm;
-
-    private MatchStatus status;
     private Playing first;
     private Playing second;
 
-    public static void provideMatch(Playing first, Playing second, MatchStatus status){
-        algorithm.eloProcessing(first, second, status);
-        switch (status) {
-            case HOME_WIN:
-                first.addMatch(second, "win");
-                second.addMatch(first, "lose");
-                break;
-            case DRAW:
-                first.addMatch(second, "draw");
-                second.addMatch(first, "draw");
-                break;
-            case GUEST_WIN:
-                first.addMatch(second, "lose");
-                second.addMatch(first, "win");
-                break;
-        }
-    }
-
     public Match(Playing first, Playing second) {
-        algorithm = new Elo(first, second);
         this.first = first;
         this.second = second;
     }
 
     public Match(Playing first, Playing second, MatchStatus status) {
-        algorithm = new Elo(first, second);
         this.first = first;
         this.second = second;
-        this.status = status;
-        setWinner(status);
     }
 
     @Override
-    public void setWinner(MatchStatus status) {
-        algorithm.processMatchResult(status);
-        switch (status) {
-            case HOME_WIN:
-                this.first.addMatch(second, "win");
-                this.second.addMatch(first, "lose");
-                break;
-            case DRAW:
-                this.first.addMatch(second, "draw");
-                this.second.addMatch(first, "draw");
-                break;
-            case GUEST_WIN:
-                this.first.addMatch(second, "lose");
-                this.second.addMatch(first, "win");
-                break;
-        }
+    public Playing getFirstPlayer() {
+        return first;
     }
 
     @Override
-    public double getFirstWinProbability() {
-        return algorithm.getFirstPlayerWinProbability();
-    }
-
-    @Override
-    public double getSecondWinProbability() {
-        return algorithm.getSecondPlayerWinProbability();
+    public Playing getSecondPlayer() {
+        return second;
     }
 }

@@ -2,6 +2,7 @@ package com.glhf.elo.entities;
 
 import com.glhf.elo.api.PlayersProcessor;
 import com.glhf.elo.api.Playing;
+import com.glhf.elo.engines.EloException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -31,8 +32,7 @@ public class PlayersList implements PlayersProcessor {
      * ID Name
      */
     @Override
-    public void load() throws NullPointerException {
-        if (incomPlayersStream==null) throw new NullPointerException();
+    public void load() {
         this.incomPlayersStream.forEach(el -> {
             String[] strings = el.split(" ");
             playersSet.put(Integer.parseInt(strings[0]), new Player(Integer.parseInt(strings[0]),strings[1]));
@@ -48,17 +48,17 @@ public class PlayersList implements PlayersProcessor {
     }
 
     @Override
-    public Playing getPlayer(int id) throws NoSuchElementException {
+    public Playing getPlayer(int id) throws EloException {
         if (this.playersSet.containsKey(id)) {
             return this.playersSet.get(id);
         } else {
-            throw new NoSuchElementException("No player with such id!");
+            throw new EloException(EloException.ERROR_TYPE.NO_PLAYER_WITH_SUCH_ID_INSYSTEM);
         }
     }
 
     @Override
-    public void addNewPlayer(int id, String name) throws  IllegalArgumentException{
-        if (playersSet.containsKey(id)) throw new IllegalArgumentException("ID already exist in system!");
+    public void addNewPlayer(int id, String name) throws EloException {
+        if (playersSet.containsKey(id)) throw new EloException(EloException.ERROR_TYPE.PLAYER_WITH_SUCH_ID_ALREADY_REGISTER);
         playersSet.put(id, new Player(id, name));
     }
 

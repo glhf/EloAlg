@@ -1,8 +1,6 @@
 package com.glhf.elo.entities;
 
 import com.glhf.elo.api.Playing;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -16,8 +14,6 @@ import java.util.List;
  *         goodvin4@gmail.com
  */
 public class Player implements Playing {
-    private static final Logger LOG = LogManager.getLogger(Player.class);
-
     private int wins = 0;
     private int draws = 0;
     private int loses = 0;
@@ -38,16 +34,6 @@ public class Player implements Playing {
     }
 
     @Override
-    public void addMatch(Playing opponent, String result) {
-        history.add(new MatchInfo(opponent, result));
-    }
-
-    @Override
-    public List<MatchInfo> getPlayedMatchesReport() {
-        return this.history;
-    }
-
-    @Override
     public void correctPoitns(double inc){
         this.points+=inc;
         if (inc>0) {
@@ -60,8 +46,31 @@ public class Player implements Playing {
     }
 
     @Override
+    public void addMatch(Playing opponent, String result) {
+        history.add(new MatchInfo(opponent, result));
+    }
+
+    @Override
+    public String toString() {
+        return new StringBuilder().append(getId()).append(" \t").append(getName()).append(" \t")
+                .append(getPoints()).append(" \t").append(getCountOfWins()).append(" \t").append(getCountOfLoses()).toString();
+    }
+
+    @Override
+    public String historyToString() {
+        StringBuffer sb = new StringBuffer();
+        history.forEach(el -> sb.append(el.toString()));
+        return sb.toString();
+    }
+
+    @Override
+    public List<MatchInfo> getPlayedMatchesReport() {
+        return this.history;
+    }
+
+    @Override
     public double getPoints(){
-        return points;
+        return this.points;
     }
 
     @Override
@@ -77,19 +86,6 @@ public class Player implements Playing {
     @Override
     public int getCountOfDraws(){
         return this.draws;
-    }
-
-    @Override
-    public String toString() {
-        return new StringBuffer().append(getId()).append(" \t").append(getName()).append(" \t")
-                .append(getPoints()).append(" \t").append(getCountOfWins()).append(" \t").append(getCountOfLoses()).toString();
-    }
-
-    @Override
-    public String historyToString() {
-        StringBuffer sb = new StringBuffer();
-        history.forEach(el -> sb.append(el.toString()));
-        return sb.toString();
     }
 
     @Override

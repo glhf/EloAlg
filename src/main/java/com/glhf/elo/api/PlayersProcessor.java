@@ -1,7 +1,8 @@
 package com.glhf.elo.api;
 
+import com.glhf.elo.engines.EloException;
+
 import java.util.List;
-import java.util.NoSuchElementException;
 
 /**
  * API for methods of work with players:
@@ -28,7 +29,7 @@ public interface PlayersProcessor {
     /**
      * add new player
      */
-    public void addNewPlayer(int id, String name);
+    public void addNewPlayer(int id, String name) throws EloException;
 
     /**
      *
@@ -38,7 +39,7 @@ public interface PlayersProcessor {
     /**
      * Get player instance by ID
      */
-    public Playing getPlayer(int id) throws NoSuchElementException;
+    public Playing getPlayer(int id) throws EloException;
 
     /**
      * Sorted available players by
